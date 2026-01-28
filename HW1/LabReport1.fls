@@ -1,7 +1,7 @@
-PWD /Users/kevin/Desktop/CSCI2750
+PWD /Users/kevin/Desktop/CSCI2750/HW1
 INPUT /opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/web2c/texmf.cnf
 INPUT /opt/homebrew/Cellar/texlive/20250308_1/share/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT /Users/kevin/Desktop/CSCI2750/LabReport1.tex
+INPUT /Users/kevin/Desktop/CSCI2750/HW1/LabReport1.tex
 OUTPUT LabReport1.log
 INPUT /opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/base/article.cls
 INPUT /opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/base/article.cls

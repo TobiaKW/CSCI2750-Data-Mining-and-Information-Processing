@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025/Homebrew) (preloaded format=pdflatex 2025.10.11)  21 JAN 2026 10:26
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025/Homebrew) (preloaded format=pdflatex 2025.10.11)  28 JAN 2026 10:48
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**/Users/kevin/Desktop/CSCI2750/LabReport1.tex
-(/Users/kevin/Desktop/CSCI2750/LabReport1.tex
+**/Users/kevin/Desktop/CSCI2750/HW1/LabReport1.tex
+(/Users/kevin/Desktop/CSCI2750/HW1/LabReport1.tex
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/base/article.cls
@@ -477,14 +477,14 @@ L3 programming layer <2025-01-18>
  ) 
 Here is how much of TeX's memory you used:
  24919 strings out of 473190
- 652079 string characters out of 5704334
+ 652091 string characters out of 5704334
  1294493 words of memory out of 5000000
  47824 multiletter control sequences out of 15000+600000
  563912 words of font info for 54 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 99i,9n,105p,774b,2125s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,9n,105p,778b,2125s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb>
-Output written on LabReport1.pdf (1 page, 57300 bytes).
+Output written on LabReport1.pdf (1 page, 57315 bytes).
 PDF statistics:
  36 PDF objects out of 1000 (max. 8388607)
  22 compressed objects within 1 object stream

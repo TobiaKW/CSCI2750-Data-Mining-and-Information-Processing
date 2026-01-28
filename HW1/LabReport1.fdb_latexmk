@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1768962404.32666 "/Users/kevin/Desktop/CSCI2750/LabReport1.tex" "LabReport1.pdf" "LabReport1" 1768962405.08255 0
-  "/Users/kevin/Desktop/CSCI2750/LabReport1.tex" 1768962404.1039 795 2b8efae9a08e30cd20ef44da11a27659 ""
+["pdflatex"] 1769568523.41117 "/Users/kevin/Desktop/CSCI2750/HW1/LabReport1.tex" "LabReport1.pdf" "LabReport1" 1769568524.05932 0
+  "/Users/kevin/Desktop/CSCI2750/HW1/LabReport1.tex" 1769568522.99369 795 ecc72126bdf9c660dc0872c5c87798d5 ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/map/fontname/texfonts.map" 1741388039 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/map/pdftex/updmap/pdftex.map" 1741388039 5466553 2748998d7db8078826afa1f272036265 ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1741388039 1004 54797486969f23fa377b128694d548df ""
@@ -155,8 +155,8 @@
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/xcolor/xcolor.sty" 1741388039 55384 b454dec21c2d9f45ec0b793f0995b992 ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/web2c/texmf.cnf" 1741388039 42151 79f67285bdd95beca4d137b380b4b9e5 ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-var/web2c/pdftex/pdflatex.fmt" 1741388039 3346132 6a939494d30ef2febcac9d47a1191e44 ""
-  "LabReport1.aux" 1768962405.04262 230 efe32f4f2778f35986d47e110229c401 "pdflatex"
-  "LabReport1.tex" 1768962404.1039 795 2b8efae9a08e30cd20ef44da11a27659 ""
+  "LabReport1.aux" 1769568524.02251 230 efe32f4f2778f35986d47e110229c401 "pdflatex"
+  "LabReport1.tex" 1769568522.99369 795 ecc72126bdf9c660dc0872c5c87798d5 ""
   (generated)
   "LabReport1.aux"
   "LabReport1.log"
