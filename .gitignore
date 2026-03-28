@@ -1,0 +1,13 @@
+# Ignore everything at the repository root
+/*
+
+# Except these directories and their contents
+!/HW1/
+!/HW1/**
+!/HW2/
+!/HW2/**
+!/HW3/
+!/HW3/**
+
+# Keep this file tracked
+!/.gitignore

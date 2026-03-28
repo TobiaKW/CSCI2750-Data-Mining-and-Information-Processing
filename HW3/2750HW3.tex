@@ -1,0 +1,963 @@
+\documentclass[fleqn]{article}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage[margin=25truemm]{geometry}
+\usepackage{hyperref}
+
+\title{CSCI2750 Homework 3}
+\author{Wong Cheuk Yin 1155192671}
+\date{\today}
+
+\begin{document}
+    \maketitle
+    \section{Problem 1}
+    \subsection{Part (ai)}
+    Dataset:
+    \[
+        a = (1, 2),\quad b = (2, 1),\quad c = (0, 1),\quad d = (1, 0).
+    \]
+
+    \noindent Mean:
+    \[
+        \frac{a+b+c+d}{4} = \left(\frac{1+2+0+1}{4}, \frac{2+1+1+0}{4}\right) = (1, 1).
+    \]
+
+    \noindent De-meaned dataset:
+    \[
+        X = \begin{pmatrix}
+            1-1 & 2-1 \\
+            2-1 & 1-1 \\
+            0-1 & 1-1 \\
+            1-1 & 0-1 \\
+        \end{pmatrix} = \begin{pmatrix}
+            0 & 1 \\
+            1 & 0 \\
+            -1 & 0 \\
+            0 & -1 \\
+        \end{pmatrix}.
+    \]
+
+    \subsection{Part (aii)}
+    Labels: $y_a=y_b=+1$ and $y_c=y_d=-1$.  
+    Treat each sample and $w$ as row vectors in $\mathbb{R}^{1\times 2}$.
+    Use the perceptron update rule
+    \[
+        w \leftarrow w + y_i x_i
+        \quad \text{if } y_i(x_i w^\top)\le 0,
+    \]
+    with initial point $w_0=(0,0)$ and the order $(a,b,c,d)$.
+    \[
+        a'=(0,1),\quad b'=(1,0),\quad c'=(-1,0),\quad d'=(0,-1).
+    \]
+
+    \begin{enumerate}
+        \item Start with $w=(0,0)$.
+        \item For $a'$: $y_a(a' w^\top)=+1\cdot 0=0\le 0$, add $a'$ to $w$.
+        \[
+            w=(0,0)+(0,1)=(0,1).
+        \]
+        \item For $b'$: $y_b(b' w^\top)=+1\cdot 0=0\le 0$, add $b'$ to $w$.
+        \[
+            w=(0,1)+(1,0)=(1,1).
+        \]
+        \item For $c'$: $y_c(c' w^\top)=-1\cdot(-1)=1>0$, no update.
+        \item For $d'$: $y_d(d' w^\top)=-1\cdot(-1)=1>0$, no update.
+    \end{enumerate}
+
+    After one pass, the perceptron finds $w=(1,1)$, which defines a separating hyperplane.
+
+    \newpage
+    \subsection{Part (aiii)}
+    The de-meaned points are
+    \[
+        a'=(0,1),\quad b'=(1,0),\quad c'=(-1,0),\quad d'=(0,-1).
+    \]
+    A separating hyperplane found in Part (aii) is
+    \[
+        w=(1,1), \qquad x w^\top = 0 \iff x_1 + x_2 = 0.
+    \]
+
+    \begin{center}
+    \begin{tikzpicture}[scale=2.1, every node/.style={font=\small}]
+        \draw[->] (-1.4,0) -- (1.4,0) node[right] {$x_1$};
+        \draw[->] (0,-1.4) -- (0,1.4) node[above] {$x_2$};
+        \draw[thick,dashed] (-1.2,1.2) -- (1.2,-1.2) node[below right] {$x_1+x_2=0$};
+
+        \fill[blue] (0,1) circle (1.3pt) node[above right] {$a'(+1)$};
+        \fill[blue] (1,0) circle (1.3pt) node[below right] {$b'(+1)$};
+        \fill[red] (-1,0) circle (1.3pt) node[above left] {$c'(-1)$};
+        \fill[red] (0,-1) circle (1.3pt) node[below left] {$d'(-1)$};
+    \end{tikzpicture}
+    \end{center}
+
+    \noindent For margin, we have
+    \[
+        \gamma = \min_i \frac{y_i (x_i w^\top)}{\|w\|_2}.
+    \]
+    Calculating $y_i(x_i w^\top)$ gives 1 for all four points, and $\|w\|_2=\sqrt{2}$, hence
+    \[
+        \gamma = \frac{1}{\sqrt{2}}.
+    \]
+    This is the largest achievable margin for this symmetric dataset.
+
+    \medskip
+    \noindent\textbf{Conclusion}
+    From Part (aii), the basic perceptron gives $w=(1,1)$, so the separating hyperplane is
+    \[
+        x w^\top = 0 \iff x_1+x_2=0.
+    \]
+    Using this $w$, the margin is
+    \[
+        \gamma=\min_i \frac{y_i(x_i w^\top)}{\|w\|_2}=\frac{1}{\sqrt{2}}.
+    \]
+    From the geometric symmetry of the de-meaned dataset, the largest achievable margin is also $\frac{1}{\sqrt{2}}$.
+    Therefore, the separator obtained in Part (aii) is a max-margin separator for this dataset.
+
+    \newpage
+    \subsection{Part (b)}
+    From Figure 1, we have the following dataset (row-vector form):
+    \[
+    \begin{aligned}
+        &\text{Class 1: } x_1=(-3,1),\; x_2=(-2,2),\\
+        &\text{Class 2: } x_3=(0,3),\; x_4=(3,4),\\
+        &\text{Class 3: } x_5=(-1,-4),\; x_6=(1,-2).
+    \end{aligned}
+    \]
+    Let $w_1,w_2,w_3\in\mathbb{R}^{1\times 2}$ with initialization
+    \[
+        w_1^0=w_2^0=w_3^0=(0,0).
+    \]
+    Prediction rule:
+    \[
+        \hat y=\arg\max_{k\in\{1,2,3\}} xw_k^\top.
+    \]
+    (Tie-break rule: choose the smallest class index.)  
+    If $\hat y\neq y$, update:
+    \[
+        w_y \leftarrow w_y + x,\qquad
+        w_{\hat y} \leftarrow w_{\hat y} - x,
+    \]
+    and keep the remaining class weight unchanged.
+
+    \medskip
+    \noindent\textbf{Per-epoch comparison table (all samples):}
+    \[
+    \begin{array}{c|c|c|c|c|c|c}
+        \text{Epoch} & \text{Sample} & (w_1,w_2,w_3)\text{ state} & \text{Score vec }(s_1,s_2,s_3) & \text{True } y & \text{Pred } \hat y & \text{Mistake?}\\
+        \hline
+        1 & x_1=(-3,1) & ((0,0),(0,0),(0,0)) & (0,0,0) & 1 & 1 & \text{No}\\
+        1 & x_2=(-2,2) & ((0,0),(0,0),(0,0)) & (0,0,0) & 1 & 1 & \text{No}\\
+        1 & x_3=(0,3) & ((0,0),(0,0),(0,0)) & (0,0,0) & 2 & 1 & \text{Yes}\\
+        1 & x_4=(3,4) & ((0,-3),(0,3),(0,0)) & (-12,12,0) & 2 & 2 & \text{No}\\
+        1 & x_5=(-1,-4) & ((0,-3),(0,3),(0,0)) & (12,-12,0) & 3 & 1 & \text{Yes}\\
+        1 & x_6=(1,-2) & ((1,1),(0,3),(-1,-4)) & (-1,-6,7) & 3 & 3 & \text{No}\\
+        \hline
+        2 & x_1=(-3,1) & ((1,1),(0,3),(-1,-4)) & (-2,6,-1) & 1 & 2 & \text{Yes}\\
+        2 & x_2=(-2,2) & ((-2,2),(3,2),(-1,-4)) & (8,-2,-6) & 1 & 1 & \text{No}\\
+        2 & x_3=(0,3) & ((-2,2),(3,2),(-1,-4)) & (6,6,-12) & 2 & 1 & \text{Yes}\\
+        2 & x_4=(3,4) & ((-2,-1),(3,5),(-1,-4)) & (-10,30,-19) & 2 & 2 & \text{No}\\
+        2 & x_5=(-1,-4) & ((-2,-1),(3,5),(-1,-4)) & (6,-23,17) & 3 & 3 & \text{No}\\
+        2 & x_6=(1,-2) & ((-2,-1),(3,5),(-1,-4)) & (-4,-2,7) & 3 & 3 & \text{No}\\
+        \hline
+        3 & x_1=(-3,1) & ((-2,-1),(3,5),(-1,-4)) & (5,-7,5) & 1 & 1 & \text{No}\\
+        3 & x_2=(-2,2) & ((-2,-1),(3,5),(-1,-4)) & (4,11,-6) & 1 & 2 & \text{Yes}\\
+        3 & x_3=(0,3) & ((-4,1),(5,3),(-1,-4)) & (-3,15,-12) & 2 & 2 & \text{No}\\
+        3 & x_4=(3,4) & ((-4,1),(5,3),(-1,-4)) & (-2,27,-19) & 2 & 2 & \text{No}\\
+        3 & x_5=(-1,-4) & ((-4,1),(5,3),(-1,-4)) & (0,-17,17) & 3 & 3 & \text{No}\\
+        3 & x_6=(1,-2) & ((-4,1),(5,3),(-1,-4)) & (-6,-1,7) & 3 & 3 & \text{No}\\
+        \hline
+        4 & x_1=(-3,1) & ((-4,1),(5,3),(-1,-4)) & (13,-12,-1) & 1 & 1 & \text{No}\\
+        4 & x_2=(-2,2) & ((-4,1),(5,3),(-1,-4)) & (10,-4,-6) & 1 & 1 & \text{No}\\
+        4 & x_3=(0,3) & ((-4,1),(5,3),(-1,-4)) & (3,9,-12) & 2 & 2 & \text{No}\\
+        4 & x_4=(3,4) & ((-4,1),(5,3),(-1,-4)) & (-8,27,-19) & 2 & 2 & \text{No}\\
+        4 & x_5=(-1,-4) & ((-4,1),(5,3),(-1,-4)) & (0,-17,17) & 3 & 3 & \text{No}\\
+        4 & x_6=(1,-2) & ((-4,1),(5,3),(-1,-4)) & (-6,-1,7) & 3 & 3 & \text{No}
+    \end{array}
+    \]
+    Hence, convergence is reached at Epoch 4 (the first zero-mistake epoch).
+
+    \newpage
+    \section{Problem 2}
+
+    \subsection{Part (a)}
+    Find the equations of the hyperplanes $h_1$ and $h_2$.
+
+    \medskip
+    \noindent By observation:
+    \begin{itemize}
+        \item The line $h_1$ passes through points such as $(3,8)$ and $(5,2)$, so slope is
+        \[
+            m_1=\frac{2-8}{5-3}=-3.
+        \]
+        Hence
+        \[
+            \frac{x_2-8}{x_1-3}=-3
+            \quad\Longleftrightarrow\quad
+            x_2=-3x_1+17
+            \quad\Longleftrightarrow\quad
+            h_1(x_1,x_2)=3x_1+x_2-17=0.
+        \]
+        \item The line $h_2$ passes through points such as $(2,1)$ and $(4,4)$, so slope is
+        \[
+            m_2=\frac{4-1}{4-2}=\frac{3}{2}.
+        \]
+        Hence
+        \[
+            \frac{x_2-1}{x_1-2}=\frac{3}{2}
+            \quad\Longleftrightarrow\quad
+            x_2=\frac{3}{2}x_1-2
+            \quad\Longleftrightarrow\quad
+            h_2(x_1,x_2)=3x_1-2x_2-4=0.
+        \]
+    \end{itemize}
+
+    \subsection{Part (b)}
+    \noindent Support vectors are points with smallest perpendicular distance to the hyperplane,
+    equivalently smallest $|h(x)|$.
+
+    \medskip
+    \noindent We use the formula for distance from a point to a hyperplane:
+    \[
+        \frac{|ax_1+bx_2+c|}{\sqrt{a^2+b^2}}.
+    \]
+
+    \medskip
+    \noindent For $h_1(x)=3x_1+x_2-17$:
+    \begin{itemize}
+        \item Blue points: $(2,6)\mapsto |{-5}|=5,\ (3,4)\mapsto |{-4}|=4,\ (2,2.5)\mapsto |{-8.5}|=8.5$. Shortest is (3,4).
+        \item Red points: $(6,2)\mapsto |3|=3,\ (7,6)\mapsto |10|=10,\ (8,4)\mapsto |11|=11$. Shortest is (6,2).
+    \end{itemize}
+    So support vectors for $h_1$ are
+    \[
+        (3,4)\ \text{(blue)}\quad\text{and}\quad (6,2)\ \text{(red)}.
+    \]
+
+    \medskip
+    \noindent Consider $h_2(x)=3x_1-2x_2-4$:
+    \begin{itemize}
+        \item Blue points: $(2,6)\mapsto |{-10}|=10,\ (3,4)\mapsto |{-3}|=3,\ (2,2.5)\mapsto |{-3}|=3$. Shortest is (3,4) and (2,2.5).
+        \item Red points: $(6,2)\mapsto |10|=10,\ (7,6)\mapsto |5|=5,\ (8,4)\mapsto |12|=12$. Shortest is (7,6).
+    \end{itemize}
+    So support vectors for $h_2$ are
+    \[
+        (3,4),\ (2,2.5)\ \text{(blue)}\quad\text{and}\quad (7,6)\ \text{(red)}.
+    \]
+
+    \subsection{Part (c)}
+    \noindent For hyperplane $ax_1+bx_2+c=0$, normal vector is $(a,b)$.
+
+    \medskip
+    \noindent For $h_1$: normal vector $(3,1)$, so $\|w_1\|=\sqrt{10}$ and minimum $|h_1(x)|=3$ (calculated in Part (b)).
+    \[
+        \gamma_1=\frac{3}{\sqrt{10}}\approx 0.949.
+    \]
+
+    \noindent For $h_2$: normal vector $(3,-2)$, so $\|w_2\|=\sqrt{13}$ and minimum $|h_2(x)|=3$.
+    \[
+        \gamma_2=\frac{3}{\sqrt{13}}\approx 0.832.
+    \]
+
+    \noindent Therefore, $\gamma_1>\gamma_2$, so $h_1$ has the larger margin.
+
+    \subsection{Part (d)}
+    I used the following code to fit the linear SVM:
+    \begin{verbatim}
+        % Data from Figure 2
+        X = [2 6;
+            3 4;
+            2 2.5;
+            6 2;
+            7 6;
+            8 4];
+        y = [ 1; 1; 1; -1; -1; -1];
+
+        cvx_begin quiet
+            variables w(2) b
+            minimize( sum_square(w) )
+            subject to
+                y .* (X*w + b) >= 1;
+        cvx_end
+
+        m_svm = -w(1)/w(2);
+        c_svm = -b/w(2);
+        fprintf('SVM boundary: %.2f x1 - x2 + %.2f = 0\n', m_svm, c_svm);
+    \end{verbatim}
+
+    \noindent which gives the following output:
+    \begin{verbatim}
+SVM boundary: 4.00 x1 - x2 + -15.00 = 0
+    \end{verbatim}
+
+    \medskip
+    \noindent This boundary is closer to the hyperplane $h_1$ than to $h_2$, since its slope is nearer to that of $h_1$.
+
+    \newpage
+    \section{Problem 3}
+    Given
+    \[
+        K_1(p,q)=(1+p^\top q)^2,\qquad
+        K_2(p,q)=(4+3p^\top q)^2.
+    \]
+    Expand both kernels with $t=p^\top q$:
+    \[
+        K_1=1+2t+t^2,\qquad
+        K_2=16+24t+9t^2.
+    \]
+    Since $K_2$ is \emph{not} a constant multiple of $K_1$, there is no universal scalar mapping
+    $\beta_i=c\,\alpha_i$ that always converts the optimizer of one dual problem to the other.
+
+    \medskip
+    \noindent Therefore, in general, $\beta$ must be solved from the dual optimization with kernel $K_2$ directly (it cannot be written only as a data-independent closed-form function of $\alpha$).
+
+
+    \section{Problem 4}
+    Consider the dataset:
+
+    \[
+    \begin{array}{c c c | c}
+        A_1 & A_2 & A_3 & y\\
+        \hline
+        1 & 1 & 5 & +\\
+        1 & 1 & 7 & +\\
+        1 & 0 & 8 & -\\
+        0 & 0 & 3 & +\\
+        0 & 1 & 7 & -\\
+        0 & 1 & 4 & -\\
+        0 & 0 & 5 & -\\
+        1 & 0 & 6 & +\\
+        0 & 1 & 1 & -
+    \end{array}
+    \]
+
+    \subsection{Part (a)}
+     \[
+        \Pr(y=+)=\frac{4}{9}.
+    \]
+    \[
+        \Pr(A_2=1\mid y=-)=\frac{3}{5}.
+    \]
+
+    \subsection{Part (b)}
+    Given $p=(1,0,7)$,
+    
+    \medskip
+    \noindent\textbf{Full Bayes classifier:}
+
+    \medskip
+    \noindent In the training data, the configuration $(1,0,7)$ does not appear in either class; therefore
+    \[
+    \Pr(p\mid y=+)=0,\qquad \Pr(p\mid y=-)=0.
+    \]
+    
+    \noindent Hence, with a plain frequency estimate (no smoothing), both posterior scores are zero and the Full Bayes classifier is \emph{undetermined} for this sample.
+
+    \newpage
+    \noindent\textbf{Naive Bayes classifier:}
+
+    \medskip
+    LHS:
+    \noindent \[
+    \Pr(A_{1}=1\mid y=+) = \frac{3}{4}
+    \]
+    \[
+    \Pr(A_{2}=0\mid y=+) = \frac{2}{4}
+    \]
+    \[
+    \Pr(A_{3}=7\mid y=+) = \frac{1}{4}
+    \]
+    \[
+    \Pr(x=\bm{p}\mid y=+) = \frac{3}{4} * \frac{2}{4} * \frac{1}{4} = \frac{3}{32} 
+    \]
+
+    \medskip
+    RHS:
+    \noindent \[
+    \Pr(A_{1}=1\mid y=-) = \frac{1}{5}
+    \]
+    \[
+    \Pr(A_{2}=0\mid y=-) = \frac{2}{5}
+    \]
+    \[
+    \Pr(A_{3}=7\mid y=-) = \frac{1}{5}
+    \]
+    \[
+    \Pr(x=\bm{p}\mid y=-) = \frac{1}{5} * \frac{2}{5} * \frac{1}{5} = \frac{2}{125}
+    \]
+
+    LHS > RHS, therefore Naive Bayes predicts $y=-$.
+
+    \subsection{Part (c)}
+
+    \noindent For each training point $x^{(i)}=(A_1,A_2,A_3)$,
+    \[
+    d_i=\|x^{(i)}-p\|_2=\sqrt{(A_1-1)^2+(A_2-0)^2+(A_3-7)^2}.
+    \]
+
+    \[
+    \begin{array}{c|c|c}
+        \text{Training point }x^{(i)} & y^{(i)} & d_i \\
+        \hline
+        (1,1,5) & + & \sqrt{5}\approx 2.236\\
+        (1,1,7) & + & 1\\
+        (1,0,8) & - & 1\\
+        (0,0,3) & + & \sqrt{17}\approx 4.123\\
+        (0,1,7) & - & \sqrt{2}\approx 1.414\\
+        (0,1,4) & - & \sqrt{11}\approx 3.317\\
+        (0,0,5) & - & \sqrt{5}\approx 2.236\\
+        (1,0,6) & + & 1\\
+        (0,1,1) & - & \sqrt{38}\approx 6.164
+    \end{array}
+    \]
+    
+    \noindent The three closest points are those with distance $1$:
+    \[
+        (1,1,7)\ (+),\quad (1,0,8)\ (-),\quad (1,0,6)\ (+).
+    \]
+    Their labels are $+,-,+$, so majority voting gives $\hat y=+$.
+
+
+    \subsection{Part (d)}
+    Assume the two classes follow individual multivariate Gaussian distributions
+    \[
+        \mathcal{N}_c(\mu_c,\Sigma_c),\quad c=+,-.
+    \]
+    \[
+        \mathcal{D}_+=\{(1,1,5),(1,1,7),(0,0,3),(1,0,6)\},\quad
+        \mathcal{D}_-=\{(1,0,8),(0,1,7),(0,1,4),(0,0,5),(0,1,1)\}.
+    \]
+    Finding sample means and covariance matrices of each class:
+    \[
+        \hat\mu_+=\left(0.75,\ 0.50,\ 5.25\right),\qquad
+        \hat\mu_-=\left(0.20,\ 0.60,\ 5.00\right).
+    \]
+    \[
+        \hat\Sigma_+=
+        \begin{bmatrix}
+            0.1875 & 0.1250 & 0.5625\\
+            0.1250 & 0.2500 & 0.3750\\
+            0.5625 & 0.3750 & 2.1875
+        \end{bmatrix},
+        \quad
+        \hat\Sigma_-=
+        \begin{bmatrix}
+            0.1600 & -0.1200 & 0.6000\\
+            -0.1200 & 0.2400 & -0.6000\\
+            0.6000 & -0.6000 & 6.0000
+        \end{bmatrix}.
+    \]
+    Priors from class frequencies:
+    \[
+        \Pr(y=+)=\frac{4}{9},\qquad \Pr(y=-)=\frac{5}{9}.
+    \]
+
+    For class $c\in\{+,-\}$, work in log domain (same argmax as $\Pr(y=c)\,f_c(q)$ on the slide):
+    
+    \[
+        g_c(q)=\log \Pr(y=c)+\log f_c(q),
+    \]
+    \[
+        g_c(q)=\log \Pr(y=c)-\frac{1}{2}\log|\hat\Sigma_c|
+        -\frac{1}{2}(q-\hat\mu_c)^\top \hat\Sigma_c^{-1}(q-\hat\mu_c).
+    \]
+    Given $q=(0.88,-0.21,7.89)$, we have
+    \[
+        g_+(q)\approx -8.500,\qquad g_-(q)\approx -3.865.
+    \]
+    Since $g_-(q)>g_+(q)$, the Bayesian Gaussian classifier predicts
+    \[
+        \hat y=-.
+    \]
+
+    \newpage
+    \section{Problem 5}
+    We use the \textbf{word occurrence counts} from the previous homework:
+
+    \medskip
+    \begin{center}
+    \begin{tabular}{l|ccccccc}
+        \hline
+        Page & Technology & Speed & Death & Physics & Olympic & Rival & Champion \\
+        \hline
+        Stephen Hawking & 18 & 2 & 46 & 107 & 0 & 0 & 1 \\
+        James Watson & 8 & 0 & 7 & 6 & 0 & 0 & 0 \\
+        Tu Youyou & 18 & 0 & 1 & 4 & 2 & 0 & 0 \\
+        Albert Einstein & 12 & 7 & 19 & 189 & 0 & 0 & 0 \\
+        Timothy Berners-Lee & 34 & 0 & 0 & 3 & 1 & 0 & 0 \\
+        Kobe Bryant & 1 & 1 & 62 & 0 & 38 & 1 & 6 \\
+        Cristiano Ronaldo & 0 & 1 & 4 & 0 & 7 & 1 & 3 \\
+        Lionel Messi & 0 & 3 & 1 & 0 & 15 & 12 & 19 \\
+        Michael Phelps & 1 & 1 & 2 & 0 & 326 & 5 & 11 \\
+        Usain Bolt & 9 & 24 & 0 & 3 & 177 & 8 & 26 \\
+        \hline
+        \textbf{Total} & 101 & 39 & 142 & 312 & 566 & 27 & 66 \\
+        \hline
+    \end{tabular}
+    \end{center}
+    
+    \medskip
+    \noindent Let $X\in\mathbb{R}^{10\times 7}$ have rows $x^{(i)\top}$, where $x^{(i)}\in\mathbb{R}^7$ is the count vector for page $i$ (same row order as the HW2 table):
+    \[
+    X=
+    \begin{bmatrix}
+        18 & 2 & 46 & 107 & 0 & 0 & 1 \\
+        8 & 0 & 7 & 6 & 0 & 0 & 0 \\
+        18 & 0 & 1 & 4 & 2 & 0 & 0 \\
+        12 & 7 & 19 & 189 & 0 & 0 & 0 \\
+        34 & 0 & 0 & 3 & 1 & 0 & 0 \\
+        1 & 1 & 62 & 0 & 38 & 1 & 6 \\
+        0 & 1 & 4 & 0 & 7 & 1 & 3 \\
+        0 & 3 & 1 & 0 & 15 & 12 & 19 \\
+        1 & 1 & 2 & 0 & 326 & 5 & 11 \\
+        9 & 24 & 0 & 3 & 177 & 8 & 26
+    \end{bmatrix}.
+    \]
+    
+    \medskip
+    \noindent\textbf{Step A (labels).}
+    \[
+        y^{(i)}=
+        \begin{cases}
+            +1, & i=1,\ldots,5 \quad\text{(scientist)},\\
+            -1, & i=6,\ldots,10 \quad\text{(athlete)}.
+        \end{cases}
+    \]
+
+    \medskip
+    \noindent\textbf{Step B (row normalization).}
+    With $\varepsilon=10^{-6}$,
+    \[
+        \tilde{x}^{(i)}=\frac{x^{(i)}}{\|x^{(i)}\|_2+\varepsilon}.
+    \]
+    Calculating
+    \begin{center}
+    {\footnotesize
+    \begin{tabular}{c|l|r|ccccccc}
+        $i$ & Page & $\|x^{(i)}\|_2$ & \multicolumn{7}{c}{$\tilde{x}^{(i)}$} \\
+        \hline
+        1 & Hawking & $117.872813$ &
+        $0.152707$ & $0.016967$ & $0.390251$ & $0.907758$ & $0$ & $0$ & $0.008484$ \\
+        2 & Watson & $12.206556$ &
+        $0.655385$ & $0$ & $0.573462$ & $0.491539$ & $0$ & $0$ & $0$ \\
+        3 & Tu Youyou & $18.574176$ &
+        $0.969087$ & $0$ & $0.053838$ & $0.215353$ & $0.107676$ & $0$ & $0$ \\
+        4 & Einstein & $190.459970$ &
+        $0.063005$ & $0.036753$ & $0.099758$ & $0.992335$ & $0$ & $0$ & $0$ \\
+        5 & Berners-Lee & $34.146742$ &
+        $0.995703$ & $0$ & $0$ & $0.087856$ & $0.029285$ & $0$ & $0$ \\
+        6 & Kobe & $72.986300$ &
+        $0.013701$ & $0.013701$ & $0.849474$ & $0$ & $0.520646$ & $0.013701$ & $0.082207$ \\
+        7 & Ronaldo & $8.717798$ &
+        $0$ & $0.114708$ & $0.458831$ & $0$ & $0.802955$ & $0.114708$ & $0.344124$ \\
+        8 & Messi & $27.202941$ &
+        $0$ & $0.110282$ & $0.036761$ & $0$ & $0.551411$ & $0.441129$ & $0.698454$ \\
+        9 & Phelps & $326.233046$ &
+        $0.003065$ & $0.003065$ & $0.006131$ & $0$ & $0.999286$ & $0.015326$ & $0.033718$ \\
+        10 & Bolt & $180.928163$ &
+        $0.049743$ & $0.132649$ & $0$ & $0.016581$ & $0.978289$ & $0.044216$ & $0.143703$ \\
+        \hline
+    \end{tabular}
+    }
+    \end{center}
+
+    \medskip
+    \noindent\textbf{Step C (de-meaning).}
+    \[
+        \mu_X=\frac{1}{10}\sum_{i=1}^{10}\tilde{x}^{(i)},\qquad
+        g^{(i)}=\tilde{x}^{(i)}-\mu_X.
+    \]
+    Numerically (to six decimals), the mean of the normalized rows is
+    \begin{center}
+    {\footnotesize
+    \begin{tabular}{ccccccc}
+        \multicolumn{7}{c}{$\mu_X^\top$} \\
+        \hline
+        Tech. & Speed & Death & Phys. & Olympic & Rival & Champ. \\
+        \hline
+        $0.290240$ & $0.042813$ & $0.246851$ & $0.271142$ & $0.398955$ & $0.062908$ & $0.131069$ \\
+        \hline
+    \end{tabular}
+    }
+    \end{center}
+    and the de-meaned vectors $g^{(i)}$ are:
+    \begin{center}
+    {\footnotesize
+    \begin{tabular}{c|l|ccccccc}
+        $i$ & Page & \multicolumn{7}{c}{$g^{(i)}$} \\
+        \hline
+        1 & Hawking & $-0.137533$ & $-0.025845$ & $0.143400$ & $0.636616$ & $-0.398955$ & $-0.062908$ & $-0.122585$ \\
+        2 & Watson & $0.365146$ & $-0.042813$ & $0.326612$ & $0.220397$ & $-0.398955$ & $-0.062908$ & $-0.131069$ \\
+        3 & Tu Youyou & $0.678848$ & $-0.042813$ & $-0.193013$ & $-0.055789$ & $-0.291278$ & $-0.062908$ & $-0.131069$ \\
+        4 & Einstein & $-0.227234$ & $-0.006060$ & $-0.147092$ & $0.721192$ & $-0.398955$ & $-0.062908$ & $-0.131069$ \\
+        5 & Berners-Lee & $0.705463$ & $-0.042813$ & $-0.246851$ & $-0.183286$ & $-0.369669$ & $-0.062908$ & $-0.131069$ \\
+        6 & Kobe & $-0.276539$ & $-0.029111$ & $0.602624$ & $-0.271142$ & $0.121691$ & $-0.049207$ & $-0.048862$ \\
+        7 & Ronaldo & $-0.290240$ & $0.071895$ & $0.211981$ & $-0.271142$ & $0.404000$ & $0.051800$ & $0.213055$ \\
+        8 & Messi & $-0.290240$ & $0.067470$ & $-0.210090$ & $-0.271142$ & $0.152456$ & $0.378221$ & $0.567385$ \\
+        9 & Phelps & $-0.287174$ & $-0.039747$ & $-0.240720$ & $-0.271142$ & $0.600331$ & $-0.047582$ & $-0.097351$ \\
+        10 & Bolt & $-0.240496$ & $0.089837$ & $-0.246851$ & $-0.254561$ & $0.579334$ & $-0.018692$ & $0.012634$ \\
+        \hline
+    \end{tabular}
+    }
+    \end{center}
+    We stack the $g^{(i)\top}$ as rows to form $G\in\mathbb{R}^{10\times 7}$.
+
+    \subsection{Parts (a)--(c): MATLAB outputs}
+    Numerical results from \texttt{problem5.m} for the perceptron, linear SVM, and Gaussian Bayes classifiers.
+    \subsubsection*{Part (a) Perceptron}
+    Standard perceptron with at most $1000$ iterations yields
+    \[
+        w_p^\top=
+        \begin{bmatrix}
+            0.541 & -0.069 & -0.050 & 0.581 & -0.690 & -0.126 & -0.254
+        \end{bmatrix},
+        \qquad
+        \gamma_p=0.366.
+    \]
+
+    \subsubsection*{Part (b) Linear SVM (CVX)}
+    Hard-margin linear SVM gives
+    \[
+        w_s^\top=
+        \begin{bmatrix}
+            1.116 & -0.049 & -0.406 & 1.179 & -1.078 & -0.152 & -0.344
+        \end{bmatrix},
+        \qquad
+        b_s=-0.022,
+        \qquad
+        \gamma_s=0.494.
+    \]
+
+    \subsubsection*{Part (c) Gaussian Bayes (equal priors, ridge on $\Sigma_c$)}
+    Ridge parameter $\lambda=10^{-3}$; we set $\boldsymbol{\Sigma}_c\leftarrow \boldsymbol{\Sigma}_c+\lambda I$ after computing the sample covariances.
+    Estimated class means (column vectors in $\mathbb{R}^7$):
+    \[
+        \boldsymbol{\mu}_+=
+        \begin{bmatrix}
+            0.277 \\ -0.032 \\ -0.023 \\ 0.268 \\ -0.372 \\ -0.063 \\ -0.129
+        \end{bmatrix},
+        \qquad
+        \boldsymbol{\mu}_-=
+        \begin{bmatrix}
+            -0.277 \\ 0.032 \\ 0.023 \\ -0.268 \\ 0.372 \\ 0.063 \\ 0.129
+        \end{bmatrix}.
+    \]
+    Regularized covariance matrices:
+    {\footnotesize
+    \[
+        \boldsymbol{\Sigma}_+=
+        \begin{bmatrix}
+            0.157 & -0.005 & -0.028 & -0.142 & 0.011 & 0.000 & -0.001 \\
+            -0.005 & 0.001 & 0.000 & 0.005 & 0.000 & 0.000 & 0.000 \\
+            -0.028 & 0.000 & 0.050 & 0.029 & -0.005 & 0.000 & 0.000 \\
+            -0.142 & 0.005 & 0.029 & 0.131 & -0.010 & 0.000 & 0.001 \\
+            0.011 & 0.000 & -0.005 & -0.010 & 0.003 & 0.000 & 0.000 \\
+            0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.001 & 0.000 \\
+            -0.001 & 0.000 & 0.000 & 0.001 & 0.000 & 0.000 & 0.001
+        \end{bmatrix},
+    \]
+    \[
+        \boldsymbol{\Sigma}_-=
+        \begin{bmatrix}
+            0.001 & 0.000 & -0.001 & 0.000 & 0.002 & -0.001 & -0.002 \\
+            0.000 & 0.004 & -0.007 & 0.000 & 0.001 & 0.004 & 0.008 \\
+            -0.001 & -0.007 & 0.115 & -0.001 & -0.041 & -0.018 & -0.020 \\
+            0.000 & 0.000 & -0.001 & 0.001 & 0.001 & 0.000 & 0.000 \\
+            0.002 & 0.001 & -0.041 & 0.001 & 0.042 & -0.017 & -0.025 \\
+            -0.001 & 0.004 & -0.018 & 0.000 & -0.017 & 0.027 & 0.038 \\
+            -0.002 & 0.008 & -0.020 & 0.000 & -0.025 & 0.038 & 0.060
+        \end{bmatrix}.
+    \]
+    }%
+    Training error on $(G,y)$ is $0.000$ ($0/10$ misclassified).
+
+    \subsection{Part (d) Testing}
+    By counting occurrences of the keywords on each page, we obtain the following raw count vectors:
+    \begin{center}
+    \begin{tabular}{l|ccccccc}
+        \hline
+        Page & Tech. & Speed & Death & Phys. & Olympic & Rival & Champ. \\
+        \hline
+        Niels Bohr ($x^{(11)}$) & 3 & 2 & 3 & 64 & 2 & 0 & 0 \\
+        Ariel Ortega ($x^{(12)}$) & 0 & 0 & 0 & 0 & 8 & 0 & 0 \\
+        Winston Churchill ($x^{(13)}$) & 1 & 0 & 17 & 1 & 1 & 1 & 1 \\
+        \hline
+    \end{tabular}
+    \end{center}
+
+    \medskip
+    \noindent\textbf{Test preprocessing (same as training).}
+    With the \textbf{same} $\varepsilon=10^{-6}$ and \textbf{same} training mean $\mu_X$ from Step~C above,
+    \[
+        \tilde{x}^{(j)}=\frac{x^{(j)}}{\|x^{(j)}\|_2+\varepsilon},\qquad
+        g^{(j)}=\tilde{x}^{(j)}-\mu_X,\qquad j\in\{11,12,13\}.
+    \]
+    Numerically,
+    \begin{center}
+    {\footnotesize
+    \begin{tabular}{c|l|r|ccccccc}
+        $j$ & Page & $\|x^{(j)}\|_2$ & \multicolumn{7}{c}{$\tilde{x}^{(j)}$} \\
+        \hline
+        11 & Bohr & $64.202804$ &
+        $0.046727$ & $0.031151$ & $0.046727$ & $0.996841$ & $0.031151$ & $0$ & $0$ \\
+        12 & Ortega & $8$ &
+        $0$ & $0$ & $0$ & $0$ & $1$ & $0$ & $0$ \\
+        13 & Churchill & $17.146428$ &
+        $0.058321$ & $0$ & $0.991460$ & $0.058321$ & $0.058321$ & $0.058321$ & $0.058321$ \\
+        \hline
+    \end{tabular}
+    }
+    \end{center}
+    \begin{center}
+    {\footnotesize
+    \begin{tabular}{c|l|ccccccc}
+        $j$ & Page & \multicolumn{7}{c}{$g^{(j)}$} \\
+        \hline
+        11 & Bohr &
+        $-0.243513$ & $-0.011662$ & $-0.200124$ & $0.725699$ & $-0.367804$ & $-0.062908$ & $-0.131069$ \\
+        12 & Ortega &
+        $-0.290240$ & $-0.042813$ & $-0.246851$ & $-0.271142$ & $0.601045$ & $-0.062908$ & $-0.131069$ \\
+        13 & Churchill &
+        $-0.231919$ & $-0.042813$ & $0.744609$ & $-0.212821$ & $-0.340634$ & $-0.004587$ & $-0.072748$ \\
+        \hline
+    \end{tabular}
+    }
+    \end{center}
+
+    \medskip
+    \noindent\textbf{Predicted labels.}
+    We apply each $g^{(j)}$ to the three classifiers from parts (a)--(c). Using \texttt{problem5.m} (CVX for the linear SVM, with ridge $\lambda=10^{-3}$ for Bayes), we obtain:
+    \begin{center}
+    \begin{tabular}{l|ccc}
+        \hline
+        Test page & Perceptron $\hat y$ & Linear SVM $\hat y$ & Gaussian Bayes $\hat y$ \\
+        \hline
+        Niels Bohr & $+1$ & $+1$ & $+1$ \\
+        Ariel Ortega & $-1$ & $-1$ & $-1$ \\
+        Winston Churchill & $-1$ & $-1$ & $-1$ \\
+        \hline
+    \end{tabular}
+    \end{center}
+    (Encode $+1$ as scientist and $-1$ as athlete.)
+
+    \medskip
+    \noindent\textbf{Interpretation.}
+    Bohr is classified as a scientist because his counts emphasize \emph{physics}.
+    Ortega is classified as an athlete because only the \emph{Olympic} count is nonzero, similar to the athlete training pages.
+    Churchill is labeled as an athlete even though he was not one: he was a politician but his counts (e.g.\ \emph{death}) resemble the athlete side of the training data more than the scientist side.
+    Maybe the keywords choice is not good for this task.
+
+    \newpage
+    \section{Appendix: Problem 5 (MATLAB code and output)}
+    The CVX package must be on the MATLAB path for the linear SVM. The helper files \texttt{perceptron.m} and \texttt{geometric\_margin.m} are in the same folder as \texttt{problem5.m}.
+
+    \subsubsection*{Source code}
+    \noindent\textbf{\texttt{problem5.m}}
+    \begin{verbatim}
+clear; clc;
+
+X = [
+    18  2 46 107   0  0  1
+     8  0  7   6   0  0  0
+    18  0  1   4   2  0  0
+    12  7 19 189   0  0  0
+    34  0  0   3   1  0  0
+     1  1 62   0  38  1  6
+     0  1  4   0   7  1  3
+     0  3  1   0  15 12 19
+     1  1  2   0 326  5 11
+     9 24  0   3 177  8 26
+];
+
+y = [ones(5, 1); -ones(5, 1)];
+
+eps_norm = 1e-6;
+row_norm = sqrt(sum(X.^2, 2)) + eps_norm;
+X_tilde = X ./ row_norm;
+mu_X = mean(X_tilde, 1);
+G = X_tilde - mu_X;
+
+[N, d] = size(G);
+
+% --- (a) Perceptron ---
+T = 1000;
+w_p_row = perceptron(G, y, T);
+w_p = w_p_row(:);
+
+gamma_p = geometric_margin(G, y, w_p, 0);
+
+fprintf('(a) Perceptron\n');
+fprintf('    w_p^T = [');
+fprintf('%.3f ', w_p');
+fprintf(']\n');
+fprintf('    gamma_p = %.3f\n\n', gamma_p);
+
+% --- (b) Linear SVM  ---
+
+cvx_begin quiet
+    variables w_s(d) b_s
+    minimize( 0.5 * (w_s' * w_s) )
+    subject to
+        y .* (G * w_s + b_s) >= 1;
+cvx_end
+
+gamma_s = geometric_margin(G, y, w_s, b_s);
+
+fprintf('(b) Linear SVM \n');
+fprintf('    w_s^T = [');
+fprintf('%.3f ', w_s');
+fprintf(']\n');
+fprintf('    b_s = %.3f\n', b_s);
+fprintf('    gamma_s = %.3f\n\n', gamma_s);
+
+% --- (c) Gaussian Bayes, equal priors 1/2, ridge on covariances ---
+lambda_ridge = 1e-3;
+fprintf('(c) Gaussian Bayes (ridge lambda = %.3f)\n', lambda_ridge);
+
+idx_pos = y == 1;
+idx_neg = y == -1;
+G_pos = G(idx_pos, :);
+G_neg = G(idx_neg, :);
+
+mu_plus = mean(G_pos, 1)';
+mu_minus = mean(G_neg, 1)';
+
+%regularization
+Sigma_plus = cov(G_pos, 1) + lambda_ridge * eye(d);
+Sigma_minus = cov(G_neg, 1) + lambda_ridge * eye(d);
+
+fprintf('    mu_+ =\n    ');
+fprintf('%.3f  ', mu_plus');
+fprintf('\n');
+fprintf('    Sigma_+ =\n');
+print_matrix_3dp(Sigma_plus);
+fprintf('    mu_- =\n    ');
+fprintf('%.3f  ', mu_minus');
+fprintf('\n');
+fprintf('    Sigma_- =\n');
+print_matrix_3dp(Sigma_minus);
+
+log_prior = log(0.5);
+y_hat = zeros(N, 1);
+for i = 1:N
+    g = G(i, :)';
+    ll_plus = log_prior + logmvnpdf_col(g, mu_plus, Sigma_plus);
+    ll_minus = log_prior + logmvnpdf_col(g, mu_minus, Sigma_minus);
+    if ll_plus >= ll_minus
+        y_hat(i) = 1;
+    else
+        y_hat(i) = -1;
+    end
+end
+
+train_err = mean(y_hat ~= y);
+fprintf('    Training error = %.3f (%d / %d misclassified)\n', train_err, sum(y_hat ~= y), N);
+
+% --- Local helper: print matrix with 3 decimal places ---
+function print_matrix_3dp(M)
+    [nr, nc] = size(M);
+    for r = 1:nr
+        fprintf('    ');
+        fprintf('%.3f  ', M(r, :));
+        fprintf('\n');
+    end
+end
+
+% --- Local helper: log-density of N(mu, Sigma), x and mu column vectors ---
+function lp = logmvnpdf_col(x, mu, Sigma)
+    dloc = length(x);
+    xc = x - mu;
+    R = chol(Sigma, 'lower');
+    log_det = 2 * sum(log(diag(R)));
+    z = R \ xc;
+    quad = z' * z;
+    lp = -0.5 * (dloc * log(2 * pi) + log_det + quad);
+end
+    \end{verbatim}
+
+    \medskip
+    \noindent\textbf{\texttt{perceptron.m}}
+    \begin{verbatim}
+function w = perceptron(X, y, T)
+
+    [N, d] = size(X);
+    w = zeros(1, d);
+    iter = 1;
+
+    while iter <= T
+        found = false;
+        for i = 1:N
+            if y(i) * (w * X(i, :)') <= 0
+                w = w + y(i) * X(i, :);
+                found = true;
+                break;
+            end
+        end
+
+        if ~found
+            break;
+        end
+        iter = iter + 1;
+    end
+end
+    \end{verbatim}
+
+    \medskip
+    \noindent\textbf{\texttt{geometric\_margin.m}}
+    \begin{verbatim}
+function gamma = geometric_margin(G, y, w, b)
+
+    if nargin < 4 || isempty(b)
+        b = 0;
+    end
+    w = w(:);
+    denom = norm(w);
+    if denom == 0
+        gamma = NaN;
+        return
+    end
+    s = y(:) .* (G * w + b);
+    gamma = min(s) / denom;
+end
+    \end{verbatim}
+
+    \subsubsection*{Program output}
+    Console output from running \texttt{problem5.m} (three decimal places):
+    \begin{verbatim}
+(a) Perceptron
+    w_p^T = [0.541 -0.069 -0.050 0.581 -0.690 -0.126 -0.254 ]
+    gamma_p = 0.366
+
+(b) Linear SVM 
+    w_s^T = [1.116 -0.049 -0.406 1.179 -1.078 -0.152 -0.344 ]
+    b_s = -0.022
+    gamma_s = 0.494
+
+(c) Gaussian Bayes (ridge lambda = 0.001)
+    mu_+ =
+    0.277  -0.032  -0.023  0.268  -0.372  -0.063  -0.129  
+    Sigma_+ =
+    0.157  -0.005  -0.028  -0.142  0.011  0.000  -0.001  
+    -0.005  0.001  -0.000  0.005  -0.000  0.000  0.000  
+    -0.028  -0.000  0.050  0.029  -0.005  0.000  0.000  
+    -0.142  0.005  0.029  0.131  -0.010  0.000  0.001  
+    0.011  -0.000  -0.005  -0.010  0.003  0.000  -0.000  
+    0.000  0.000  0.000  0.000  0.000  0.001  0.000  
+    -0.001  0.000  0.000  0.001  -0.000  0.000  0.001  
+    mu_- =
+    -0.277  0.032  0.023  -0.268  0.372  0.063  0.129  
+    Sigma_- =
+    0.001  0.000  -0.001  0.000  0.002  -0.001  -0.002  
+    0.000  0.004  -0.007  0.000  0.001  0.004  0.008  
+    -0.001  -0.007  0.115  -0.001  -0.041  -0.018  -0.020  
+    0.000  0.000  -0.001  0.001  0.001  -0.000  -0.000  
+    0.002  0.001  -0.041  0.001  0.042  -0.017  -0.025  
+    -0.001  0.004  -0.018  -0.000  -0.017  0.027  0.038  
+    -0.002  0.008  -0.020  -0.000  -0.025  0.038  0.060  
+    Training error = 0.000 (0 / 10 misclassified)
+    \end{verbatim}
+
+\end{document}
